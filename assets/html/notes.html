@@ -42,6 +42,9 @@
     const title = document.getElementById("title");
     const message = document.getElementById("message");
 
+    // save note button
+    // creates note object with the data in the text fields
+    // sends a post to the server
     $("#save_note").click(function () {
       const note = {
         id: '_',
@@ -53,6 +56,13 @@
         alert("Data: " + data + "\nStatus: " + status);
       });
     });
+
+    // delete note button
+    // creates an id object containing the id to delete
+    // sends a delete request to the server with an id
+
+
+    
   </script>
 
   <style>

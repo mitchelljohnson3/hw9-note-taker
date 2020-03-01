@@ -19,31 +19,34 @@ router.post('/', (req, res) => {
 
 // deletes the note from db.json with the given id
 router.delete('/:id', (req, res) => {
-    res.send('Test route!');
+    deleteData(req.url.id);
 });
 
-function writeToFile(data) {
-    fs.writeFile('./json/notes.json', JSON.stringify(data), (err) => {
-        if (err) throw err;
-    });
+function postData(data) {
+    // read existing data in the notes.json
+    // convert it into an array
+    // get the length of the array
+    // use the arrays length as the id of the incoming note
+    // add the incoming note to the previous array
+    // convert the array back into json
+    // neatly overwrite the notes.json with the newly updated json data
+
+
 }
 
-function postData(data) {
-    fs.readFile('./json/notes.json', 'utf8', (err, data) => {
-        if (err) throw err;
-        let oldNotes = {
-            "length": JSON.parse(data).length,
-            "content": JSON.parse(data)
-        }
+function deleteData(id) {
+    // read existing data in the notes.json
+    // convert it into an array
+    // get the length of the array
+    // delete the value of the array at the index ( id - 1 )
+    // convert array back into json
+    // overwrite notes.json with new json data
+    
+}
 
-        let oldNote = oldNotes.content;
+function writeToFile(data) {
+    // neatly formats data and overwrites the notes.json file with it
 
-        let note = data;
-        console.log(note)
-        note.id = oldNotes.length;
-        oldNote.push(note);
-        writeToFile(oldNote);
-    });
 }
 
 module.exports = router;
