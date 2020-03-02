@@ -1,12 +1,7 @@
 [
-    {
-        "id": 1,
-        "title": "my-note",
-        "message": "I like to eat shrimp, I also love to plan things with my notecards."
-    },
-    {
-        "id": 2,
-        "title": "my-other-note",
-        "message": "I need to poop."
-    }
+  {
+    "id": 0,
+    "name": "this is note 1",
+    "message": "asdfasdf"
+  }
 ]

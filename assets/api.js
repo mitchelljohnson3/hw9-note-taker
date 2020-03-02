@@ -9,44 +9,73 @@ router.use(express.json());
 // the route is '/' because when we get into this router, the base route '/api/notes' is now just '/'
 // reads the db.json file and sends it
 router.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '/json/notes.json'))
+    res.sendFile(path.join(__dirname, './json/notes.json'));
 });
 
 // appends the users notes to db.json
 router.post('/', (req, res) => {
-    postData(req.body);
+    writeJSON(req.body);
+    res.end();
 });
 
 // deletes the note from db.json with the given id
 router.delete('/:id', (req, res) => {
-    deleteData(req.url.id);
+    let url = req.url;
+    let id = url.slice(1);
+    deleteJSON(id);
+    res.end();
 });
 
-function postData(data) {
-    // read existing data in the notes.json
-    // convert it into an array
-    // get the length of the array
-    // use the arrays length as the id of the incoming note
-    // add the incoming note to the previous array
-    // convert the array back into json
-    // neatly overwrite the notes.json with the newly updated json data
-
-
-}
-
-function deleteData(id) {
-    // read existing data in the notes.json
-    // convert it into an array
-    // get the length of the array
-    // delete the value of the array at the index ( id - 1 )
-    // convert array back into json
-    // overwrite notes.json with new json data
-    
-}
-
-function writeToFile(data) {
+function writeJSON(newData) {
     // neatly formats data and overwrites the notes.json file with it
+    // data comes in as an object
 
+    fs.readFile('./json/notes.json', (err, data) => {
+        if (err) throw err;
+
+        let oldData = JSON.parse(data);
+        const id = oldData.length;
+        newData.id = id;
+        oldData.push(newData);
+        const newJSON = JSON.stringify(oldData, null, 2);
+
+        fs.writeFile('./json/notes.json', newJSON, (err) => {
+            if (err) throw err;
+        });
+    });
+}
+
+function deleteJSON(id) {
+    // deletes the note object in the notes.json array at the specified id
+    fs.readFile('./json/notes.json', (err, data) => {
+        if (err) throw err;
+
+        let oldData = JSON.parse(data);
+        oldData.splice(id,1);
+        const newJSON = JSON.stringify(oldData, null, 2);
+
+        fs.writeFile('./json/notes.json', newJSON, (err) => {
+            if (err) throw err;
+            IDreset();
+        });
+    });
+}
+
+function IDreset() {
+    // resets the ids of the note objects in the notes.json file after a note has been deleted to keep the ids consistant
+    fs.readFile('./json/notes.json', (err, data) => {
+        if (err) throw err;
+
+        let oldData = JSON.parse(data);
+        for(note of oldData) {
+            note.id = oldData.indexOf(note);
+        }
+        const newJSON = JSON.stringify(oldData);
+
+        fs.writeFile('./json/notes.json', newJSON, (err) => {
+            if (err) throw err;
+        });
+    });
 }
 
 module.exports = router;

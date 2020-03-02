@@ -23,6 +23,12 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-4 list-container">
+        <a id="save_note" class="btn btn-primary btn-lg mt-4" role="submit" style="color: #ffffff;">Submit Note</a>
+        <a href="http://localhost:3000/api/notes" class="btn btn-primary btn-lg mt-4" role="button"
+          style="color: #ffffff;">See All Notes</a>
+        <a id="delete_note" class="btn btn-primary btn-lg mt-4" role="submit"
+          style="color: #ffffff; float: left;">Delete Note At ID:</a>
+        <textarea id="delete_id" class="note-textarea" placeholder="ID OF NOTE TO DELETE"></textarea>
         <div class="card">
           <ul class="list-group">
           </ul>
@@ -31,7 +37,6 @@
       <div class="col-8">
         <input id="title" class="note-title" placeholder="Note Title" maxlength="28" type="text">
         <textarea id="message" class="note-textarea" placeholder="Note Text"></textarea>
-        <a id="save_note" class="btn btn-primary btn-lg mt-4" role="button">Submit Note</a>
       </div>
     </div>
   </div>
@@ -41,28 +46,45 @@
     // this file will contain the various ajax calls to the server to GET, POST, and DELETE information
     const title = document.getElementById("title");
     const message = document.getElementById("message");
+    const idText = document.getElementById("delete_id");
 
     // save note button
     // creates note object with the data in the text fields
     // sends a post to the server
-    $("#save_note").click(function () {
-      const note = {
-        id: '_',
-        name: title.value,
-        message: message.value
-      }
-      console.log(note);
-      $.post("http://localhost:3000/api/notes", JSON.stringify(note), function (data, status) {
-        alert("Data: " + data + "\nStatus: " + status);
-      });
+    $("#save_note").click(function (e) {
+      e.preventDefault();
+      const note =
+      {
+        "id": 0,
+        "name": title.value,
+        "message": message.value
+      };
+      $.ajax({
+        url: "http://localhost:3000/api/notes",
+        type: 'POST',
+        data: note,
+        cache: false,
+        dataType: "json"
+      })
     });
 
     // delete note button
     // creates an id object containing the id to delete
     // sends a delete request to the server with an id
 
+    $("#delete_note").click(function (e) {
+      e.preventDefault();
+      $.ajax({
+        url: `http://localhost:3000/api/notes/${idText.value}`,
+        type: 'DELETE',
+        cache: false,
+        success: function (response) {
+          console.log(response);
+        }
+      })
+    });
 
-    
+
   </script>
 
   <style>
